@@ -11,12 +11,7 @@ internal class Enrollment
     public int StudentId { get; set; }
     public int CourseId { get; set; }
     public string Grade { get; set; }
-
-    public Enrollment(int id, int studentId, int courseId, string grade)
-    {
-        Id = id;
-        StudentId = studentId;
-        CourseId = courseId;
-        Grade = grade;
-    }
+    public Student? Student { get; set; }
+    public Course? Course { get; set; }
+    public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 }
