@@ -13,7 +13,7 @@ namespace StudentManagement.Domain.Model
         public string LastName { get; set; }
         public string Email { get; set; }
         public DateTime HireDate { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
         public ICollection<Course> Courses { get; set; } = new List<Course>();
+        public Department? DepartmentHeadOf { get; set; }
     }
 }
