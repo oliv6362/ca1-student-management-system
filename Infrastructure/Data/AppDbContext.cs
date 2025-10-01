@@ -10,6 +10,7 @@ internal class AppDbContext : DbContext
     public DbSet<Course> Courses { get; set; }
     public DbSet<Enrollment> Enrollments { get; set; }
     public DbSet<Instructor> Instructors { get; set; }
+    public DbSet<Department> Departments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -51,10 +52,22 @@ internal class AppDbContext : DbContext
         });
 
         //INSTRUCTOR
-        modelBuilder.Entity<Instructor>(i =>
+        modelBuilder.Entity<Instructor>(e =>
         {
-            i.ToTable("Instructor");
-            i.HasKey(i => i.Id);
+            e.ToTable("Instructor");
+            e.HasKey(i => i.Id);
+        });
+
+        //DEPARTMENT
+        modelBuilder.Entity<Department>(e =>
+        {
+            e.ToTable("Department");
+            e.HasKey(d => d.Id);
+
+            //FK - Instructor
+            e.HasOne(d => d.DepartmentHead)
+                .WithOne(i => i.DepartmentHeadOf)
+                .HasForeignKey<Department>(d => d.DepartmentHeadId);
         });
     }
 }
