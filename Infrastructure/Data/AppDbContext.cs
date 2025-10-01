@@ -1,6 +1,7 @@
 
 using StudentManagement.Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace StudentManagement.Infrastructure.Data;
 internal class AppDbContext : DbContext
@@ -9,9 +10,65 @@ internal class AppDbContext : DbContext
     public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<Enrollment> Enrollments { get; set; }
+    public DbSet<Instructor> Instructors { get; set; }
+    public DbSet<Department> Departments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //STUDENT
+        modelBuilder.Entity<Student>(e =>
+        {
+            e.ToTable("Student");
+            e.HasKey(s => s.Id);
+    
+        });
 
+        //COURSE
+        modelBuilder.Entity<Course>(e =>
+        {
+            e.ToTable("Course");
+            e.HasKey(c => c.Id);
+
+            //FK - Instructor
+            e.HasOne(c => c.Instructor)
+                .WithMany(i => i.Courses)
+                .HasForeignKey(c => c.InstructorId);
+        });
+
+        //ENROLLMENT
+        modelBuilder.Entity<Enrollment>(e =>
+        {
+            e.ToTable("Enrollment");
+            e.HasKey(en => en.Id);
+
+            //FK - Student
+            e.HasOne(en => en.Student)
+                .WithMany(s => s.Enrollments)
+                .HasForeignKey(en => en.StudentId);
+
+            //FK - Course
+            e.HasOne(en => en.Course)
+                .WithMany(c => c.Enrollments)
+                .HasForeignKey(en => en.CourseId);
+        });
+
+        //INSTRUCTOR
+        modelBuilder.Entity<Instructor>(e =>
+        {
+            e.ToTable("Instructor");
+            e.HasKey(i => i.Id);
+        });
+
+        //DEPARTMENT
+        modelBuilder.Entity<Department>(e =>
+        {
+            e.ToTable("Department");
+            e.HasKey(d => d.Id);
+
+            //FK - Instructor
+            e.HasOne(d => d.DepartmentHead)
+                .WithOne(i => i.DepartmentHeadOf)
+                .HasForeignKey<Department>(d => d.DepartmentHeadId);
+        });
     }
 }

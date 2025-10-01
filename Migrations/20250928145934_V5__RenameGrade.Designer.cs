@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentManagement.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using StudentManagement.Infrastructure.Data;
 namespace StudentManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250928145934_V5__RenameGrade")]
+    partial class V5__RenameGrade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,9 +33,8 @@ namespace StudentManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Credits")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
+                    b.Property<int>("Credits")
+                        .HasColumnType("int");
 
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");
@@ -46,37 +48,6 @@ namespace StudentManagement.Migrations
                     b.HasIndex("InstructorId");
 
                     b.ToTable("Course", (string)null);
-                });
-
-            modelBuilder.Entity("StudentManagement.Domain.Model.Department", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Budget")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("DepartmentHeadId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentHeadId")
-                        .IsUnique()
-                        .HasFilter("[DepartmentHeadId] IS NOT NULL");
-
-                    b.ToTable("Department", (string)null);
                 });
 
             modelBuilder.Entity("StudentManagement.Domain.Model.Enrollment", b =>
@@ -94,12 +65,17 @@ namespace StudentManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("InstructorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("InstructorId");
 
                     b.HasIndex("StudentId");
 
@@ -180,15 +156,6 @@ namespace StudentManagement.Migrations
                     b.Navigation("Instructor");
                 });
 
-            modelBuilder.Entity("StudentManagement.Domain.Model.Department", b =>
-                {
-                    b.HasOne("StudentManagement.Domain.Model.Instructor", "DepartmentHead")
-                        .WithOne("DepartmentHeadOf")
-                        .HasForeignKey("StudentManagement.Domain.Model.Department", "DepartmentHeadId");
-
-                    b.Navigation("DepartmentHead");
-                });
-
             modelBuilder.Entity("StudentManagement.Domain.Model.Enrollment", b =>
                 {
                     b.HasOne("StudentManagement.Domain.Model.Course", "Course")
@@ -196,6 +163,10 @@ namespace StudentManagement.Migrations
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("StudentManagement.Domain.Model.Instructor", null)
+                        .WithMany("Enrollments")
+                        .HasForeignKey("InstructorId");
 
                     b.HasOne("StudentManagement.Domain.Model.Student", "Student")
                         .WithMany("Enrollments")
@@ -217,7 +188,7 @@ namespace StudentManagement.Migrations
                 {
                     b.Navigation("Courses");
 
-                    b.Navigation("DepartmentHeadOf");
+                    b.Navigation("Enrollments");
                 });
 
             modelBuilder.Entity("StudentManagement.Domain.Model.Student", b =>
