@@ -13,6 +13,6 @@ internal class Course
     public string Title { get; set; }
     [Precision(5, 2)]
     public decimal Credits { get; set; }
-    public Instructor? Instructor {get; set; } 
+    public Instructor? Instructor { get; set; }
     public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 }

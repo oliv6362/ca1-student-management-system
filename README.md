@@ -9,6 +9,5 @@ Project which implements a Student Management System in a .NET enviroment.
 ## Migration Approach
 | Approach  | README |
 | ------------- | ------------- |
+| State-Based | [README.md](https://github.com/oliv6362/ca1-student-management-system/blob/feat/add-department/State-Based/README.md) |
 | Change-Based (EF Core)  | [ef-approach/README.md](https://github.com/oliv6362/ca1-student-management-system/tree/feat/modify-course-ef/Changed-Based) |
-												
-

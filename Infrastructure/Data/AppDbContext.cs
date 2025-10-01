@@ -20,7 +20,6 @@ internal class AppDbContext : DbContext
         {
             e.ToTable("Student");
             e.HasKey(s => s.Id);
-    
         });
 
         //COURSE
