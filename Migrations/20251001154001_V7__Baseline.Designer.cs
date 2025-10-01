@@ -12,8 +12,8 @@ using StudentManagement.Infrastructure.Data;
 namespace StudentManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251001153044_V6__Baseline")]
-    partial class V6__Baseline
+    [Migration("20251001154001_V7__Baseline")]
+    partial class V7__Baseline
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,9 @@ namespace StudentManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Credits")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Credits")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");

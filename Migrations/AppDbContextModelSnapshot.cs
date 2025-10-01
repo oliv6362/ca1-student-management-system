@@ -30,8 +30,9 @@ namespace StudentManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Credits")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Credits")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");

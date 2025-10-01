@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudentManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class V6__Baseline : Migration
+    public partial class V7__Baseline : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,7 +53,7 @@ namespace StudentManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InstructorId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Credits = table.Column<int>(type: "int", nullable: false)
+                    Credits = table.Column<decimal>(type: "decimal(5,2)", precision: 5, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
