@@ -1,6 +1,7 @@
 
 using StudentManagement.Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace StudentManagement.Infrastructure.Data;
 internal class AppDbContext : DbContext
@@ -19,7 +20,6 @@ internal class AppDbContext : DbContext
         {
             e.ToTable("Student");
             e.HasKey(s => s.Id);
-
         });
 
         //COURSE
