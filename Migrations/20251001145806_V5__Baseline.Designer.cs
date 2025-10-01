@@ -12,8 +12,8 @@ using StudentManagement.Infrastructure.Data;
 namespace StudentManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251001125714_V4__Baseline")]
-    partial class V4__Baseline
+    [Migration("20251001145806_V5__Baseline")]
+    partial class V5__Baseline
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,12 +61,9 @@ namespace StudentManagement.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Grade")
+                    b.Property<string>("FinalGrade")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("InstructorId")
-                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -74,8 +71,6 @@ namespace StudentManagement.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("InstructorId");
 
                     b.HasIndex("StudentId");
 
@@ -164,10 +159,6 @@ namespace StudentManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StudentManagement.Domain.Model.Instructor", null)
-                        .WithMany("Enrollments")
-                        .HasForeignKey("InstructorId");
-
                     b.HasOne("StudentManagement.Domain.Model.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
@@ -187,8 +178,6 @@ namespace StudentManagement.Migrations
             modelBuilder.Entity("StudentManagement.Domain.Model.Instructor", b =>
                 {
                     b.Navigation("Courses");
-
-                    b.Navigation("Enrollments");
                 });
 
             modelBuilder.Entity("StudentManagement.Domain.Model.Student", b =>

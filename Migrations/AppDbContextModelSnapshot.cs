@@ -58,12 +58,9 @@ namespace StudentManagement.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Grade")
+                    b.Property<string>("FinalGrade")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("InstructorId")
-                        .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -71,8 +68,6 @@ namespace StudentManagement.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("InstructorId");
 
                     b.HasIndex("StudentId");
 
@@ -161,10 +156,6 @@ namespace StudentManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StudentManagement.Domain.Model.Instructor", null)
-                        .WithMany("Enrollments")
-                        .HasForeignKey("InstructorId");
-
                     b.HasOne("StudentManagement.Domain.Model.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
@@ -184,8 +175,6 @@ namespace StudentManagement.Migrations
             modelBuilder.Entity("StudentManagement.Domain.Model.Instructor", b =>
                 {
                     b.Navigation("Courses");
-
-                    b.Navigation("Enrollments");
                 });
 
             modelBuilder.Entity("StudentManagement.Domain.Model.Student", b =>

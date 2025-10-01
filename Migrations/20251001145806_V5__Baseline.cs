@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudentManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class V4__Baseline : Migration
+    public partial class V5__Baseline : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,8 +74,7 @@ namespace StudentManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstructorId = table.Column<int>(type: "int", nullable: true)
+                    FinalGrade = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,11 +85,6 @@ namespace StudentManagement.Migrations
                         principalTable: "Course",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Enrollment_Instructor_InstructorId",
-                        column: x => x.InstructorId,
-                        principalTable: "Instructor",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Enrollment_Student_StudentId",
                         column: x => x.StudentId,
@@ -108,11 +102,6 @@ namespace StudentManagement.Migrations
                 name: "IX_Enrollment_CourseId",
                 table: "Enrollment",
                 column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_InstructorId",
-                table: "Enrollment",
-                column: "InstructorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollment_StudentId",
