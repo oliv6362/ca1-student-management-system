@@ -33,11 +33,16 @@ namespace StudentManagement.Migrations
                     b.Property<int>("Credits")
                         .HasColumnType("int");
 
+                    b.Property<int>("InstructorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InstructorId");
 
                     b.ToTable("Course", (string)null);
                 });
@@ -57,6 +62,9 @@ namespace StudentManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("InstructorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -64,9 +72,39 @@ namespace StudentManagement.Migrations
 
                     b.HasIndex("CourseId");
 
+                    b.HasIndex("InstructorId");
+
                     b.HasIndex("StudentId");
 
                     b.ToTable("Enrollment", (string)null);
+                });
+
+            modelBuilder.Entity("StudentManagement.Domain.Model.Instructor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Instructor", (string)null);
                 });
 
             modelBuilder.Entity("StudentManagement.Domain.Model.Student", b =>
@@ -104,6 +142,17 @@ namespace StudentManagement.Migrations
                     b.ToTable("Student", (string)null);
                 });
 
+            modelBuilder.Entity("StudentManagement.Domain.Model.Course", b =>
+                {
+                    b.HasOne("StudentManagement.Domain.Model.Instructor", "Instructor")
+                        .WithMany("Courses")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Instructor");
+                });
+
             modelBuilder.Entity("StudentManagement.Domain.Model.Enrollment", b =>
                 {
                     b.HasOne("StudentManagement.Domain.Model.Course", "Course")
@@ -111,6 +160,10 @@ namespace StudentManagement.Migrations
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("StudentManagement.Domain.Model.Instructor", null)
+                        .WithMany("Enrollments")
+                        .HasForeignKey("InstructorId");
 
                     b.HasOne("StudentManagement.Domain.Model.Student", "Student")
                         .WithMany("Enrollments")
@@ -125,6 +178,13 @@ namespace StudentManagement.Migrations
 
             modelBuilder.Entity("StudentManagement.Domain.Model.Course", b =>
                 {
+                    b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("StudentManagement.Domain.Model.Instructor", b =>
+                {
+                    b.Navigation("Courses");
+
                     b.Navigation("Enrollments");
                 });
 

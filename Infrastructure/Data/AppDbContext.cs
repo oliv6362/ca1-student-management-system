@@ -9,6 +9,7 @@ internal class AppDbContext : DbContext
     public DbSet<Student> Students { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<Enrollment> Enrollments { get; set; }
+    public DbSet<Instructor> Instructors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,6 +27,10 @@ internal class AppDbContext : DbContext
             e.ToTable("Course");
             e.HasKey(c => c.Id);
 
+            //FK - Instructor
+            e.HasOne(c => c.Instructor)
+                .WithMany(i => i.Courses)
+                .HasForeignKey(c => c.InstructorId);
         });
 
         //ENROLLMENT
@@ -43,6 +48,13 @@ internal class AppDbContext : DbContext
             e.HasOne(en => en.Course)
                 .WithMany(c => c.Enrollments)
                 .HasForeignKey(en => en.CourseId);
+        });
+
+        //INSTRUCTOR
+        modelBuilder.Entity<Instructor>(i =>
+        {
+            i.ToTable("Instructor");
+            i.HasKey(i => i.Id);
         });
     }
 }

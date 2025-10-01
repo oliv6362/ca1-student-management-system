@@ -6,23 +6,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudentManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class V3__Baseline : Migration
+    public partial class V4__Baseline : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Course",
+                name: "Instructor",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Credits = table.Column<int>(type: "int", nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HireDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Course", x => x.Id);
+                    table.PrimaryKey("PK_Instructor", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,6 +46,27 @@ namespace StudentManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Course",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InstructorId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Credits = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Course", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Course_Instructor_InstructorId",
+                        column: x => x.InstructorId,
+                        principalTable: "Instructor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Enrollment",
                 columns: table => new
                 {
@@ -51,7 +74,8 @@ namespace StudentManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Grade = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstructorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,6 +87,11 @@ namespace StudentManagement.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Enrollment_Instructor_InstructorId",
+                        column: x => x.InstructorId,
+                        principalTable: "Instructor",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Enrollment_Student_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Student",
@@ -71,9 +100,19 @@ namespace StudentManagement.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Course_InstructorId",
+                table: "Course",
+                column: "InstructorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Enrollment_CourseId",
                 table: "Enrollment",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Enrollment_InstructorId",
+                table: "Enrollment",
+                column: "InstructorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollment_StudentId",
@@ -92,6 +131,9 @@ namespace StudentManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "Student");
+
+            migrationBuilder.DropTable(
+                name: "Instructor");
         }
     }
 }
